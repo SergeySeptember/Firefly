@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Product_Management_Service.Models.Product;
-using Product_Management_Service.Services.BooksLogic;
+using Product_Management_Service.Services;
 using Product_Management_Service.Services.Interfaces;
 
 namespace Product_Management_Service.Controllers
 {
-    [Route("[controller]")]
+    [Route("books")]
     [ApiController]
     public class BooksController : ControllerBase
     {
         private readonly IBooksLogic _booksLogic;
+        private readonly Validation _validation;
 
-        public BooksController(IBooksLogic booksLogic) => _booksLogic = booksLogic;
+        public BooksController(IBooksLogic booksLogic, Validation validation)
+        {
+            _booksLogic = booksLogic;
+            _validation = validation;
+        }
 
         /// <summary>
         /// Get a paginated list of books.
@@ -66,6 +71,7 @@ namespace Product_Management_Service.Controllers
         ///         "price": 500,
         ///         "quantity": 10
         ///     }
+        ///     
         /// </remarks>
         /// <response code="201">Returns the created book with ID</response>
         /// <response code="400">Some data is invalid</response>
@@ -75,14 +81,16 @@ namespace Product_Management_Service.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] BooksDTO book)
         {
-            var newBook = _booksLogic.AddBook(book);
-            if (newBook != null)
+            string validInfo = _validation.ValidationData(book);
+            if (validInfo != "correct")
             {
-                return Created($"https://localhost:5220/users/{newBook.Id}", newBook);
+                return BadRequest(validInfo);
             }
-            return BadRequest();
 
+            var newBook = _booksLogic.AddBook(book);
+            return Created($"https://localhost:5220/users/{newBook.Id}", newBook);
         }
+
         /// <summary>
         /// Update book data by ID
         /// </summary>
@@ -110,12 +118,14 @@ namespace Product_Management_Service.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] BooksDTO book)
         {
-            var updatedBook = _booksLogic.UpdateBook(id, book);
-            if (updatedBook != null)
+            string validInfo = _validation.ValidationData(id, book);
+            if (validInfo != "correct")
             {
-                return Ok(updatedBook);
+                return BadRequest(validInfo);
             }
-            return BadRequest();
+
+            var updatedBook = _booksLogic.UpdateBook(id, book);
+            return Ok(updatedBook);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Product_Management_Service.Models.Product;
+using Product_Management_Service.Services;
 using Product_Management_Service.Services.BooksLogic;
 using Product_Management_Service.Services.DataBase;
 using Product_Management_Service.Services.Interfaces;
@@ -33,6 +34,7 @@ namespace Product_Management_Service
 
             builder.Services.AddScoped<IRepository<Books>, BooksRepository>();
             builder.Services.AddScoped<IBooksLogic, BooksLogic>();
+            builder.Services.AddScoped<Validation>();
 
             var app = builder.Build();
 
