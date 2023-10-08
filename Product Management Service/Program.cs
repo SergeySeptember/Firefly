@@ -32,7 +32,7 @@ namespace Product_Management_Service
             });
 
             builder.Services.AddScoped<IRepository<Books>, BooksRepository>();
-            builder.Services.AddScoped<BooksLogic>();
+            builder.Services.AddScoped<IBooksLogic, BooksLogic>();
 
             var app = builder.Build();
 
@@ -45,7 +45,6 @@ namespace Product_Management_Service
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

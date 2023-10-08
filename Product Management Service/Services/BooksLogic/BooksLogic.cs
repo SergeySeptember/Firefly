@@ -3,14 +3,11 @@ using Product_Management_Service.Services.Interfaces;
 
 namespace Product_Management_Service.Services.BooksLogic
 {
-    public class BooksLogic // Todo: Make interface
+    public class BooksLogic : IBooksLogic
     {
         private readonly IRepository<Books> _booksRepository;
 
-        public BooksLogic(IRepository<Books> booksTepository)
-        {
-            _booksRepository = booksTepository;
-        }
+        public BooksLogic(IRepository<Books> booksTepository) => _booksRepository = booksTepository;
 
         public IEnumerable<Books> GetBooks(int pageNumber, int pageSize)
         {
@@ -37,9 +34,10 @@ namespace Product_Management_Service.Services.BooksLogic
             var updatedBook = _booksRepository.GetBookById(id);
             return updatedBook;
         }
-        public void DeleteBook(int id)
+        public string DeleteBook(int id)
         {
-            _booksRepository.RemoveBook(id);
+            string response = _booksRepository.RemoveBook(id);
+            return response;
         }
     }
 }

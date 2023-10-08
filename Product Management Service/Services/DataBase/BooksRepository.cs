@@ -6,13 +6,9 @@ namespace Product_Management_Service.Services.DataBase
 {
     public class BooksRepository : IRepository<Books>
     {
-
         private readonly DataBaseContext _context;
 
-        public BooksRepository(DataBaseContext context)
-        {
-            _context = context;
-        }
+        public BooksRepository(DataBaseContext context) => _context = context;
 
         public IEnumerable<Books> GetAllBooks(int pageNumber, int pageSize)
         {
@@ -54,7 +50,6 @@ namespace Product_Management_Service.Services.DataBase
                 updateBook.Quantity = book.Quantity;
                 _context.SaveChanges();
             }
-
         }
 
         public Books ReturnCreatedBook(BooksDTO book)
@@ -63,14 +58,16 @@ namespace Product_Management_Service.Services.DataBase
             return newBook;
         }
 
-        public void RemoveBook(int id)
+        public string RemoveBook(int id)
         {
             var book = _context.Books.Find(id);
             if (book != null)
             {
                 _context.Books.Remove(book);
                 _context.SaveChanges();
+                return "Success";
             }
+            return "Book not found";
         }
     }
 }

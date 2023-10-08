@@ -9,6 +9,6 @@ namespace Product_Management_Service.Services.Interfaces
         void AddBook(BooksDTO book);
         void UpdateBook(int id, BooksDTO book);
         Books ReturnCreatedBook(BooksDTO book);
-        void RemoveBook(int id);
+        string RemoveBook(int id);
     }
 }
